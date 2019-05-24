@@ -57,7 +57,8 @@ class SforceEnterpriseClient extends SforceBaseClient
      */
     public function create($sObjects, $type)
     {
-        foreach ($sObjects as &$sObject) {
+        $arg = [];
+        foreach ($sObjects as $sObject) {
             // FIX for fieldsToNull issue - allow array in fieldsToNull (STEP #1)
             $xmlStr = '';
             if (isset($sObject->fieldsToNull) && is_array($sObject->fieldsToNull)) {
@@ -66,15 +67,14 @@ class SforceEnterpriseClient extends SforceBaseClient
                 }
             }
 
-            $sObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
+            $soapObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
 
             // FIX for fieldsToNull issue - allow array in fieldsToNull (STEP #2)
             if ($xmlStr != '') {
-                $sObject->enc_value->fieldsToNull = new SoapVar(new SoapVar($xmlStr, XSD_ANYXML), SOAP_ENC_ARRAY);
+                $soapObject->enc_value->fieldsToNull = new SoapVar(new SoapVar($xmlStr, XSD_ANYXML), SOAP_ENC_ARRAY);
             }
+            $arg[] = $soapObject;
         }
-
-        $arg = $sObjects;
 
         return parent::_create(new SoapParam($arg, "sObjects"));
     }
@@ -88,7 +88,9 @@ class SforceEnterpriseClient extends SforceBaseClient
      */
     public function update($sObjects, $type, $assignment_header = null, $mru_header = null)
     {
-        foreach ($sObjects as &$sObject) {
+        $arg = new stdClass;
+        $arg->sObjects = [];
+        foreach ($sObjects as $sObject) {
             // FIX for fieldsToNull issue - allow array in fieldsToNull (STEP #1)
             $xmlStr = '';
             if (isset($sObject->fieldsToNull) && is_array($sObject->fieldsToNull)) {
@@ -97,16 +99,14 @@ class SforceEnterpriseClient extends SforceBaseClient
                 }
             }
 
-            $sObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
+            $soapObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
 
             // FIX for fieldsToNull issue - allow array in fieldsToNull (STEP #2)
             if ($xmlStr != '') {
-                $sObject->enc_value->fieldsToNull = new SoapVar(new SoapVar($xmlStr, XSD_ANYXML), SOAP_ENC_ARRAY);
+                $soapObject->enc_value->fieldsToNull = new SoapVar(new SoapVar($xmlStr, XSD_ANYXML), SOAP_ENC_ARRAY);
             }
+            $arg->sObjects[] = $soapObject;
         }
-
-        $arg = new stdClass;
-        $arg->sObjects = $sObjects;
 
         return parent::_update($arg);
     }
@@ -125,9 +125,10 @@ class SforceEnterpriseClient extends SforceBaseClient
     public function upsert($ext_Id, $sObjects, $type = 'Contact')
     {
         $arg = new stdClass;
+        $arg->sObjects = [];
         $arg->externalIDFieldName = new SoapVar($ext_Id, XSD_STRING, 'string', 'http://www.w3.org/2001/XMLSchema');
 
-        foreach ($sObjects as &$sObject) {
+        foreach ($sObjects as $sObject) {
             // FIX for fieldsToNull issue - allow array in fieldsToNull (STEP #1)
             $xmlStr = '';
             if (isset($sObject->fieldsToNull) && is_array($sObject->fieldsToNull)) {
@@ -136,15 +137,14 @@ class SforceEnterpriseClient extends SforceBaseClient
                 }
             }
 
-            $sObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
+            $soapObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
 
             // FIX for fieldsToNull issue - allow array in fieldsToNull (STEP #2)
             if ($xmlStr != '') {
-                $sObject->enc_value->fieldsToNull = new SoapVar(new SoapVar($xmlStr, XSD_ANYXML), SOAP_ENC_ARRAY);
+                $soapObject->enc_value->fieldsToNull = new SoapVar(new SoapVar($xmlStr, XSD_ANYXML), SOAP_ENC_ARRAY);
             }
+            $arg->sObjects[] = $soapObject;
         }
-
-        $arg->sObjects = $sObjects;
 
         return parent::_upsert($arg);
     }
@@ -166,5 +166,3 @@ class SforceEnterpriseClient extends SforceBaseClient
         return parent::_merge($arg);
     }
 }
-
-?>
