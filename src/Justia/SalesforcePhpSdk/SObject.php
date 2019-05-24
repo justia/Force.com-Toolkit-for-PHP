@@ -101,7 +101,7 @@ class SObject
                             $this->fields = $this->convertFields($fieldsToConvert);
                         }
 
-                        if (sizeof($anArray) > 0) {
+                        if (count($anArray) > 0) {
                             foreach ($anArray as $key => $children_sobject) {
                                 $this->fields->$key = $children_sobject;
                             }
@@ -289,5 +289,3 @@ class SObject
         return isset($param->type);
     }
 }
-
-?>

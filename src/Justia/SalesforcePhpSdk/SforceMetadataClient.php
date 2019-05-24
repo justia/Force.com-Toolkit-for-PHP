@@ -43,7 +43,7 @@ class SforceMetadataClient
     {
         $soapClientArray = null;
 
-        $phpversion = substr(phpversion(), 0, strpos(phpversion(), '-'));
+        $phpversion = substr(PHP_VERSION, 0, strpos(PHP_VERSION, '-'));
         if ($phpversion > '5.1.2') {
             $soapClientArray = array(
                 'user_agent' => 'salesforce-toolkit-php/' . $this->version,
@@ -185,5 +185,3 @@ class SforceMetadataClient
         return $this->sforce->__getLastResponseHeaders();
     }
 }
-
-?>
