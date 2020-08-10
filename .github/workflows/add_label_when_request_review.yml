@@ -2,7 +2,7 @@ name: Add label to pull requests with reviewer
 
 on:
   pull_request:
-    types: [review_requested]
+    types: [review_requested, opened, edited, reopened, ready_for_review]
 
 jobs:
   labelWhenReviewer:

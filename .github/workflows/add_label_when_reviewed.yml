@@ -1,16 +1,16 @@
 name: Add label to pull requests with reviewer
 
 on:
-  pull_request:
-    types: [review_requested]
+  pull_request_review:
+    types: [edited, submitted]
 
 jobs:
   labelWhenReviewer:
-    name: Add label when add reviewer
+    name: Add label when reviewed
     runs-on: ubuntu-latest
     steps:
-    - name: Label when add reviewer
+    - name: Add label when reviewed
       uses: justia/ga-add-remove-label@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        ACTION: "REVIEW_REQUESTED"
+        ACTION: "REVIEWED"
